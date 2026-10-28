@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FB Reels Blocker</title>
+  <style>
+    :root {
+      --primary: #1877F2;
+      --primary-hover: #166fe5;
+      --bg: #F0F2F5;
+      --card-bg: #FFFFFF;
+      --text-main: #050505;
+      --text-sub: #65676B;
+      --border: #CED0D4;
+      --success: #31A24C;
+      --danger: #FA383E;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      width: 320px;
+      background: var(--bg);
+      color: var(--text-main);
+      padding: 16px;
+      user-select: none;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+    }
+
+    .brand-title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+    }
+
+    .status-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .status-badge.active {
+      background: #E7F3FF;
+      color: var(--primary);
+    }
+
+    .status-badge.disabled {
+      background: #F2F2F2;
+      color: var(--text-sub);
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 12px 14px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      margin-bottom: 12px;
+    }
+
+    .main-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .main-label {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .main-sub {
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-top: 2px;
+    }
+
+    /* Switch toggle component */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .25s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .25s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 50%;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+    }
+
+    input:checked + .slider {
+      background-color: var(--primary);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    /* Options Section */
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-sub);
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .option-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #F0F2F5;
+    }
+
+    .option-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .option-text {
+      font-size: 13px;
+      color: var(--text-main);
+      padding-right: 8px;
+    }
+
+    /* Smaller switch for sub-options */
+    .switch-sm {
+      width: 36px;
+      height: 20px;
+    }
+
+    .switch-sm .slider:before {
+      height: 14px;
+      width: 14px;
+      left: 3px;
+      bottom: 3px;
+    }
+
+    .switch-sm input:checked + .slider:before {
+      transform: translateX(16px);
+    }
+
+    /* Stats Card */
+    .stats-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .stats-count {
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 13px;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="brand">
+      <img src="icons/icon32.png" alt="Icon" class="brand-icon">
+      <span class="brand-title">FB Reels Blocker</span>
+    </div>
+    <span id="statusBadge" class="status-badge active">Active</span>
+  </div>
+
+  <div class="card">
+    <div class="main-toggle-row">
+      <div>
+        <div class="main-label">Block Reels</div>
+        <div class="main-sub">Hide all Reels on Facebook</div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="masterToggle" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <div class="card" id="optionsCard">
+    <div class="section-title">Block Settings</div>
+    
+    <div class="option-row">
+      <span class="option-text">FB Page "Reels" Tabs</span>
+      <label class="switch switch-sm">
+        <input type="checkbox" id="hidePageTabs" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="option-row">
+      <span class="option-text">FB Page Reels Shelves</span>
+      <label class="switch switch-sm">
+        <input type="checkbox" id="hidePageReelsShelf" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="option-row">
+      <span class="option-text">Feed Reels & Shelves</span>
+      <label class="switch switch-sm">
+        <input type="checkbox" id="hideFeedReels" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="option-row">
+      <span class="option-text">Left Sidebar Reels Shortcut</span>
+      <label class="switch switch-sm">
+        <input type="checkbox" id="hideSidebar" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="stats-row">
+      <span>Reels hidden on active page:</span>
+      <span id="reelsHiddenCount" class="stats-count">0</span>
+    </div>
+  </div>
+
+  <div class="footer">
+    Works on Facebook Pages, Profiles & Feeds
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

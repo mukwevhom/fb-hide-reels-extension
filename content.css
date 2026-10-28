@@ -1,0 +1,37 @@
+/* Hide elements tagged by script */
+[data-fb-reel-hidden="true"] {
+  display: none !important;
+}
+
+/* 
+ * Instant zero-flash CSS rules using modern CSS :has() and attributes.
+ * These take effect immediately even before JS finishes DOM queries.
+ */
+
+/* 1. Page Navigation Tabs: "Reels" tab in page header */
+html[data-fb-reels-blocker="enabled"] a[role="tab"][href*="/reels"],
+html[data-fb-reels-blocker="enabled"] div[role="tab"]:has(a[href*="/reels"]),
+html[data-fb-reels-blocker="enabled"] div[role="tablist"] > div:has(a[href*="/reels"]),
+html[data-fb-reels-blocker="enabled"] a[role="menuitem"][href*="/reels"],
+html[data-fb-reels-blocker="enabled"] div[role="menuitem"]:has(a[href*="/reels"]),
+
+/* 2. Left Navigation Sidebar: Reels shortcut */
+html[data-fb-reels-blocker="enabled"] div[role="navigation"] a[href*="/reel/"],
+html[data-fb-reels-blocker="enabled"] div[role="navigation"] a[href*="/reels/"],
+html[data-fb-reels-blocker="enabled"] div[role="navigation"] a[href*="/watch/reels"],
+html[data-fb-reels-blocker="enabled"] div[role="navigation"] li:has(a[href*="/reel/"]),
+html[data-fb-reels-blocker="enabled"] div[role="navigation"] li:has(a[href*="/watch/reels"]),
+html[data-fb-reels-blocker="enabled"] div[role="navigation"] div[role="listitem"]:has(a[href*="/reel/"]),
+
+/* 3. News Feed: Reels and short videos shelves */
+html[data-fb-reels-blocker="enabled"] div[role="feed"] > div:has(a[href*="/reel/"]),
+html[data-fb-reels-blocker="enabled"] div[role="feed"] > div:has(a[href*="/reels/"]),
+html[data-fb-reels-blocker="enabled"] div[data-pagelet*="Reels"],
+html[data-fb-reels-blocker="enabled"] div[aria-label*="Reels and short videos" i],
+html[data-fb-reels-blocker="enabled"] div[aria-label*="Reels tray" i],
+
+/* 4. Facebook Page Timeline: Reels shelf / cards with 'See all' pointing to reels */
+html[data-fb-reels-blocker="enabled"] div[role="main"] div:has(> div a[href*="/reels/"]),
+html[data-fb-reels-blocker="enabled"] div[role="article"]:has(a[href*="/reel/"]) {
+  display: none !important;
+}
